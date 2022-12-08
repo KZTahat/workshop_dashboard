@@ -25,6 +25,7 @@
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
+    "socket.io-client": "^4.5.4",
     "superagent": "^8.0.4",
     "sweetalert2": "^11.6.15",
     "validate.js": "^0.13.1",

@@ -24,16 +24,19 @@ const Footer = props => {
         &copy;{' '}
         <Link
           component="a"
-          href="https://devias.io/"
+          href="website URL goes here"
           target="_blank"
         >
-          Devias IO
+          Khaled Tahat
         </Link>
-        . 2019
+        . 2022
       </Typography>
       <Typography variant="caption">
-        Created with love for the environment. By designers and developers who
-        love to work together in offices!
+        Your imagination have no limits, Be creative.
+        No rules will restrict your idea, shape it up.
+        away from perfection and Ideality, Professionalism in making art.
+        practicing makes experience  NOT theoretical study.
+        work, learn from your mistakes THEN create 😊
       </Typography>
     </div>
   );

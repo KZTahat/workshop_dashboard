@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProductsToolbar = props => {
-  const { className, ...rest } = props;
+  const { className, handleOpen, handleSearch, length, ...rest } = props;
   const classes = useStyles();
 
   return (
@@ -46,29 +46,24 @@ const ProductsToolbar = props => {
     >
       <div className={classes.row}>
         <Typography variant="h2">
-          Products
+          Products ({length})
         </Typography>
         <span className={classes.spacer} />
         <Button
           color="primary"
           variant="contained"
-          onClick={props.handleOpen}
+          onClick={handleOpen}
         >
           Add product
         </Button>
       </div>
       <div className={classes.row}>
-        {/* <form
-          onSubmit={props.handleSearch}
-          className={classes.form}
-        > */}
           <SearchInput
             className={classes.searchInput}
             placeholder="Search product"
             name='searchKey'
-            onChange={props.handleSearch}
+            onChange={handleSearch}
           />
-        {/* </form> */}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';//
 import { Link as RouterLink, withRouter } from 'react-router-dom';//
 import PropTypes from 'prop-types';//
-import validate from 'validate.js';//
+import validate from '../../common/validators';//
 import { makeStyles } from '@material-ui/styles';//
 import {
   Grid,
@@ -152,15 +152,15 @@ const SignUp = props => {
     errors: {}
   });
 
-  useEffect(() => {
-    const errors = validate(formState.values, schema);
+  // useEffect(() => {
+  //   const errors = validate(formState.values, schema);
 
-    setFormState(formState => ({
-      ...formState,
-      isValid: errors ? false : true,
-      errors: errors || {}
-    }));
-  }, [formState.values]);
+  //   setFormState(formState => ({
+  //     ...formState,
+  //     isValid: errors ? false : true,
+  //     errors: errors || {}
+  //   }));
+  // }, [formState.values]);
 
   const handleChange = event => {
     event.persist();
@@ -261,30 +261,16 @@ const SignUp = props => {
                 </Typography>
                 <TextField
                   className={classes.textField}
-                  error={hasError('firstName')}
+                  error={hasError('fullName')}
                   fullWidth
                   helperText={
-                    hasError('firstName') ? formState.errors.firstName[0] : null
+                    hasError('fullName') ? formState.errors.fullName[0] : null
                   }
-                  label="First name"
-                  name="firstName"
+                  label="Full Name"
+                  name="fullName"
                   onChange={handleChange}
                   type="text"
-                  value={formState.values.firstName || ''}
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  error={hasError('lastName')}
-                  fullWidth
-                  helperText={
-                    hasError('lastName') ? formState.errors.lastName[0] : null
-                  }
-                  label="Last name"
-                  name="lastName"
-                  onChange={handleChange}
-                  type="text"
-                  value={formState.values.lastName || ''}
+                  value={formState.values.fullName || ''}
                   variant="outlined"
                 />
                 <TextField
@@ -313,6 +299,48 @@ const SignUp = props => {
                   onChange={handleChange}
                   type="password"
                   value={formState.values.password || ''}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  error={hasError('password')}
+                  fullWidth
+                  helperText={
+                    hasError('password') ? formState.errors.password[0] : null
+                  }
+                  label="Confirm Password"
+                  name="passwordConfirm"
+                  // onChange={handleChange}
+                  type="password"
+                  value={formState.values.password || ''}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  error={hasError('phone')}
+                  fullWidth
+                  helperText={
+                    hasError('phone') ? formState.errors.phone[0] : null
+                  }
+                  label="Phone Number"
+                  name="phone"
+                  onChange={handleChange}
+                  type="text"
+                  value={formState.values.phone || ''}
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  error={hasError('city')}
+                  fullWidth
+                  helperText={
+                    hasError('city') ? formState.errors.city[0] : null
+                  }
+                  label="City"
+                  name="city"
+                  onChange={handleChange}
+                  type="text"
+                  value={formState.values.city || ''}
                   variant="outlined"
                 />
                 <div className={classes.policy}>

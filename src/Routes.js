@@ -8,9 +8,8 @@ import {
   Dashboard as DashboardView,
   ProductList as ProductListView,
   UserList as UserListView,
-  Typography as TypographyView,
-  Icons as IconsView,
   Account as AccountView,
+  TransactionsList as TransactionView,
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
@@ -44,16 +43,10 @@ const Routes = () => {
         path="/products"
       />
       <RouteWithLayout
-        component={TypographyView}
+        component={TransactionView}
         exact
         layout={MainLayout}
-        path="/typography"
-      />
-      <RouteWithLayout
-        component={IconsView}
-        exact
-        layout={MainLayout}
-        path="/icons"
+        path="/transactions"
       />
       <RouteWithLayout
         component={AccountView}
@@ -70,7 +63,7 @@ const Routes = () => {
       <RouteWithLayout
         component={SignUpView}
         exact
-        layout={MinimalLayout}
+        layout={MainLayout}
         path="/sign-up"
       />
       <RouteWithLayout

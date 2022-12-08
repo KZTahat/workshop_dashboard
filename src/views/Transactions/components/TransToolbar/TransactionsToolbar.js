@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const UsersToolbar = props => {
+const TransactionsToolbar = props => {
   const { className, handleSearch, length, ...rest } = props;
 
   const classes = useStyles();
@@ -40,14 +40,14 @@ const UsersToolbar = props => {
       className={clsx(classes.root, className)}
     >
       <div className={classes.row}>
-        <Typography variant='h4'>Customers ({length})</Typography>
+        <Typography variant='h4'>Transactions ({length})</Typography>
         <span className={classes.spacer} />
-        <Button
+        {/* <Button
           color="primary"
           variant="contained"
         >
           Add user
-        </Button>
+        </Button> */}
       </div>
       <div className={classes.row}>
         <form
@@ -55,7 +55,7 @@ const UsersToolbar = props => {
         >
           <div className={classes.row}>
             <TextField
-              placeholder="Search user"
+              placeholder="Search transaction"
               fullWidth={true}
               style={{ marginRight: '3%' }}
               name='searchKey'
@@ -65,13 +65,13 @@ const UsersToolbar = props => {
               className={classes.searchInput}
               name="searchBy"
               variant="outlined"
-              defaultValue='name'
+              defaultValue='buyerName'
               required
             >
-              <MenuItem value='name'>Name</MenuItem>
-              <MenuItem value='phone'>Phone</MenuItem>
-              <MenuItem value='email'>Email</MenuItem>
-              <MenuItem value='city'>City</MenuItem>
+              <MenuItem value='buyerName'>Name</MenuItem>
+              <MenuItem value='buyerPhoneNumber'>Phone</MenuItem>
+              <MenuItem value='transactionDate'>date</MenuItem>
+              <MenuItem value='status'>Status</MenuItem>
             </Select>
             <Button type='submit' variant='contained'>Go</Button>
           </div>
@@ -81,8 +81,8 @@ const UsersToolbar = props => {
   );
 };
 
-UsersToolbar.propTypes = {
+TransactionsToolbar.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersToolbar; 
+export default TransactionsToolbar; 

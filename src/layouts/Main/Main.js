@@ -1,10 +1,11 @@
-import React, { useState } from 'react';//
-import PropTypes from 'prop-types';//
-import clsx from 'clsx';//
-import { makeStyles, useTheme } from '@material-ui/styles';//
-import { useMediaQuery } from '@material-ui/core';//
-
-import { Sidebar, Topbar, Footer } from './components';//
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/styles';
+import { useMediaQuery } from '@material-ui/core';
+import Swal from 'sweetalert2';
+import { Sidebar, Topbar, Footer } from './components';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 const Main = props => {
   const { children } = props;
-
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
@@ -43,6 +44,27 @@ const Main = props => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
+  const handleSignout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You'll have to reauthenticate after exiting",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Sign out!'
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          // here goes the sign out implementation
+          history.push('/sign-in')
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
   return (
     <div
       className={clsx({
@@ -50,7 +72,10 @@ const Main = props => {
         [classes.shiftContent]: isDesktop
       })}
     >
-      <Topbar onSidebarOpen={handleSidebarOpen} />
+      <Topbar
+        onSidebarOpen={handleSidebarOpen}
+        handleSignout={handleSignout}
+      />
       <Sidebar
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}

@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UpdateModal = (props) => {
-    console.log(props.product);
-
     const classes = useStyles();
     return (
         <Modal

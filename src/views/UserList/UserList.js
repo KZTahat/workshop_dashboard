@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';//
-import { makeStyles } from '@material-ui/styles';//
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
-import { UsersToolbar, UsersTable, TransactionsModal } from './components';//
+import { UsersToolbar, UsersTable, TransactionsModal } from './components';
 import Swal from 'sweetalert2';
+import { useData } from '../../dataContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 let allUsers;
 const UserList = () => {
   const classes = useStyles();
-  const [users, setUsers] = useState([]);
+  const data = useData();
   const [showModal, setShowModal] = useState(false);
   const [selectedUserTransactions, setSelectedUserTransactions] = useState([]);
 
@@ -33,19 +34,7 @@ const UserList = () => {
   const handleCloseModal = () => setShowModal(false);
 
   useEffect(() => {
-    try {
-      axios.get(`${process.env.REACT_APP_USERS}/getallusers`)
-        .then((response) => {
-          setUsers(response.data.users);
-          allUsers = response.data.users;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    }
-    catch (error) {
-      console.log('inside catch', error);
-    }
+    allUsers = data.users;
   }, [])
 
   const handleDelete = (userId) => {
@@ -61,13 +50,12 @@ const UserList = () => {
       .then((result) => {
         if (result.isConfirmed) {
           axios.delete(`${process.env.REACT_APP_USERS}/deleteuser/${userId}`)
-            .then((response) => {
-              console.log(response);
+            .then(() => {
               let newUsersList = [];
-              users.forEach((user) => {
+              data.users.forEach((user) => {
                 if (user._id !== userId) newUsersList.push(user);
               })
-              setUsers(newUsersList);
+              data.setUsers(newUsersList);
               allUsers = newUsersList;
               Swal.fire(
                 'Deleted!',
@@ -86,8 +74,36 @@ const UserList = () => {
   }
 
   const handleSearch = (event) => {
-    console.log(event.target.category.value);
-    console.log(event.target.search.value);
+    event.preventDefault();
+    let searchKey = event.target.searchKey.value;
+    let searchBy = event.target.searchBy.value;
+    if (searchKey) {
+      let customers = []
+      allUsers.forEach((user) => {
+        if (user[searchBy]
+          .toLowerCase()
+          .includes(
+            searchKey
+              .toLowerCase()
+          )) {
+          customers.push(user);
+        }
+      })
+      if (customers.length) {
+        data.setUsers(customers);
+        event.target.searchKey.value = '';
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No Customers Found!',
+          footer: 'try another keyword!'
+        })
+      }
+
+    } else {
+      data.setUsers(allUsers);
+    }
   }
 
   return (
@@ -99,10 +115,11 @@ const UserList = () => {
       />
       <UsersToolbar
         handleSearch={handleSearch}
+        length={data.users.length}
       />
       <div className={classes.content}>
         <UsersTable
-          users={users}
+          users={data.users}
           handleDelete={handleDelete}
           handleShowModal={handleShowModal}
         />

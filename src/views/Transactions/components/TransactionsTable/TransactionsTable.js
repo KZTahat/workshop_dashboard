@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
-import BlockIcon from '@mui/icons-material/Block';
+import FlakyIcon from '@mui/icons-material/Flaky';
 import {
   Card,
   CardActions,
@@ -18,11 +17,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Chip,
 } from '@mui/material';
 
 import { TablePagination } from '@material-ui/core';
-
 import { getInitials } from '../../../../helpers';
 
 const useStyles = makeStyles(theme => ({
@@ -45,56 +42,50 @@ const useStyles = makeStyles(theme => ({
   actions: {
     justifyContent: 'flex-end'
   },
-  deleteIcons: {
-    marginRight: '10%',
-    color: 'red',
-    cursor: 'pointer'
-  },
-  blockIcons: {
-    marginRight: '10%',
-    color: 'rgb(199, 5, 5)',
-    cursor: 'pointer'
+  FlakyIcon: {
+    marginLeft: '12%',
+    cursor: 'pointer',
   }
 }));
 
-const UsersTable = (props) => {
-  const { className, users, handleDelete, handleShowModal, ...rest } = props;
+const TransactionsTable = (props) => {
+  const { className, transactions, updateStatus, ...rest } = props;
   const classes = useStyles();
 
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedTrans, setSelectedTrans] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
 
   const handleSelectAll = event => {
-    let selectedUsers;
+    let selectedTrans;
 
     if (event.target.checked) {
-      selectedUsers = users.map(user => user._id);
+      selectedTrans = transactions.map(user => user._id);
     } else {
-      selectedUsers = [];
+      selectedTrans = [];
     }
 
-    setSelectedUsers(selectedUsers);
+    setSelectedTrans(selectedTrans);
   };
 
   const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedUsers.indexOf(id);
-    let newSelectedUsers = [];
+    const selectedIndex = selectedTrans.indexOf(id);
+    let newSelectedTrans = [];
 
     if (selectedIndex === -1) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers, id);
+      newSelectedTrans = newSelectedTrans.concat(selectedTrans, id);
     } else if (selectedIndex === 0) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers.slice(1));
-    } else if (selectedIndex === selectedUsers.length - 1) {
-      newSelectedUsers = newSelectedUsers.concat(selectedUsers.slice(0, -1));
+      newSelectedTrans = newSelectedTrans.concat(selectedTrans.slice(1));
+    } else if (selectedIndex === selectedTrans.length - 1) {
+      newSelectedTrans = newSelectedTrans.concat(selectedTrans.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelectedUsers = newSelectedUsers.concat(
-        selectedUsers.slice(0, selectedIndex),
-        selectedUsers.slice(selectedIndex + 1)
+      newSelectedTrans = newSelectedTrans.concat(
+        selectedTrans.slice(0, selectedIndex),
+        selectedTrans.slice(selectedIndex + 1)
       );
     }
 
-    setSelectedUsers(newSelectedUsers);
+    setSelectedTrans(newSelectedTrans);
   };
 
   const handlePageChange = (event, page) => {
@@ -119,64 +110,65 @@ const UsersTable = (props) => {
                 <TableRow>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedUsers.length === users.length}
+                      checked={selectedTrans.length === transactions.length}
                       color="primary"
                       indeterminate={
-                        selectedUsers.length > 0 &&
-                        selectedUsers.length < users.length
+                        selectedTrans.length > 0 &&
+                        selectedTrans.length < transactions.length
                       }
                       onChange={handleSelectAll}
                     />
                   </TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>City</TableCell>
+                  <TableCell>Customer</TableCell>
+                  <TableCell>Trans. ID</TableCell>
                   <TableCell>Phone</TableCell>
-                  <TableCell>Signup date</TableCell>
+                  <TableCell>Trans. date</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.slice(0, rowsPerPage).map(user => (
+                {transactions.slice(0, rowsPerPage).map(transaction => (
                   <TableRow
                     className={classes.tableRow}
                     hover
-                    key={user.id}
-                    selected={selectedUsers.indexOf(user._id) !== -1}
+                    key={transaction.id}
+                    selected={selectedTrans.indexOf(transaction._id) !== -1}
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        checked={selectedUsers.indexOf(user._id) !== -1}
+                        checked={selectedTrans.indexOf(transaction._id) !== -1}
                         color="primary"
-                        onChange={event => handleSelectOne(event, user._id)}
+                        onChange={event => handleSelectOne(event, transaction._id)}
                         value="true"
                       />
                     </TableCell>
-                    <TableCell
-                    style={{cursor: 'pointer'}}
-                      onClick={() => handleShowModal(user._id)}
-                    >
+                    <TableCell>
                       <div className={classes.nameContainer}>
                         <Avatar
                           className={classes.avatar}
-                          src={user.avatarUrl}
+                          src={transaction.avatarUrl}
                         >
-                          {getInitials(user.name)}
+                          {getInitials(transaction.buyerName)}
                         </Avatar>
-                        <Typography variant="body1">{user.name}</Typography>
+                        <Typography variant="body1">{transaction.buyerName}</Typography>
                       </div>
                     </TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{transaction._id}</TableCell>
+                    <TableCell>{transaction.buyerPhoneNumber}</TableCell>
                     <TableCell>
-                      {user.city}
+                      {moment(transaction.transactionDate).format('DD/MM/YYYY')}
                     </TableCell>
-                    <TableCell>{user.phone}</TableCell>
-                    <TableCell>
-                      {moment(user.createdAt).format('DD/MM/YYYY')}
+                    <TableCell
+                      style={{ color: transaction.status == 'delivered' ? 'green' : 'red' }}
+                    >
+                      {transaction.status}
                     </TableCell>
                     <TableCell>
-                      <DeleteIcon className={classes.deleteIcons} onClick={() => handleDelete(user._id)} />
-                      <BlockIcon className={classes.blockIcons} />
+                      <FlakyIcon
+                        className={classes.FlakyIcon}
+                        onClick={() => updateStatus(transaction._id, transaction.status)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
@@ -188,7 +180,7 @@ const UsersTable = (props) => {
       <CardActions className={classes.actions}>
         <TablePagination
           component="div"
-          count={users.length}
+          count={transactions.length}
           onPageChange={handlePageChange}
           onChangeRowsPerPage={handleRowsPerPageChange}
           page={page}
@@ -200,9 +192,9 @@ const UsersTable = (props) => {
   );
 };
 
-UsersTable.propTypes = {
+TransactionsTable.propTypes = {
   className: PropTypes.string,
   users: PropTypes.array.isRequired
 };
 
-export default UsersTable;
+export default TransactionsTable;

@@ -5,7 +5,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ProductsToolbar, ProductCard, AdditionModal, UpdateModal } from './components';
-
+import { useData } from '../../dataContext';
 import {
   Typography,
   Grid,
@@ -28,18 +28,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 let allProducts; //Global variable to store all products
-
 const ProductList = () => {
   const classes = useStyles();
-  const [products, setProducts] = useState([]);
+  const data = useData();
   const [updatingProduct, setUpdatingProduct] = useState({});
-
+  const [showUpdateModal, setUpdateModal] = useState(false);
   const [showAddModal, setAddModal] = useState(false);
 
   const handleAddModal = () => setAddModal(true);
   const handleCloseAddModal = () => setAddModal(false);
 
-  const [showUpdateModal, setUpdateModal] = useState(false);
 
   const handleUpdateModal = (product) => {
     setUpdateModal(true);
@@ -48,19 +46,7 @@ const ProductList = () => {
   const handleCloseUpdateModal = () => setUpdateModal(false);
 
   useEffect(() => {
-    try {
-      axios.get(`${process.env.REACT_APP_PRODUCTS}/getallproducts`)
-        .then((response) => {
-          setProducts(response.data.products);
-          allProducts = response.data.products;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    catch (error) {
-      console.log('inside catch', error);
-    }
+    allProducts = data.products
   }, [])
 
   const handleDeletion = (id) => {
@@ -83,7 +69,7 @@ const ProductList = () => {
         axios.delete(`${process.env.REACT_APP_PRODUCTS}/deleteproduct/${id}`)
           .then(() => {
             let newList = []
-            products.forEach((product) => {
+            data.products.forEach((product) => {
               if (product._id != id) newList.push(product);
             })
             Swal.fire(
@@ -91,7 +77,7 @@ const ProductList = () => {
               'Your file has been deleted.',
               'success'
             )
-            setProducts(newList);
+            data.setProducts(newList);
             allProducts = newList;
           })
           .catch((err) => {
@@ -126,7 +112,7 @@ const ProductList = () => {
         axios.post(`${process.env.REACT_APP_PRODUCTS}/addproduct`, formData)
           .then((response) => {
             Swal.fire('Added!', '', 'success');
-            setProducts([response.data.data, ...products]);
+            data.setProducts([response.data.data, ...data.products]);
             allProducts = [response.data.data, ...allProducts]
           })
           .catch((err) => {
@@ -159,7 +145,7 @@ const ProductList = () => {
         }
         axios.patch(`${process.env.REACT_APP_PRODUCTS}/updateproduct/${productId}`, formData)
           .then(() => {
-            let newProducts = products.map((product) => {
+            let newProducts = data.products.map((product) => {
               if (product._id == productId) {
                 product.productName = formData.productName;
                 product.price = formData.price;
@@ -171,11 +157,11 @@ const ProductList = () => {
               return product;
             })
             Swal.fire('Saved!', '', 'success')
-            setProducts(newProducts);
+            data.setProducts(newProducts);
           })
           .catch((err) => {
             console.log(err);
-          })
+          });
       } else if (result.isDenied) {
         Swal.fire('Changes are not saved', '', 'info')
       }
@@ -187,13 +173,20 @@ const ProductList = () => {
     if (event.target.value != '') {
       let searchOutput = []
       allProducts.forEach((product) => {
-        if (product.productName.toLowerCase().includes(event.target.value)) {
+        if (product.productName
+          .toLowerCase()
+          .includes(
+            event
+              .target
+              .value
+              .toLowerCase()
+          )) {
           searchOutput.push(product);
         }
-        setProducts(searchOutput);
+        data.setProducts(searchOutput);
       })
     } else {
-      setProducts(allProducts);
+      data.setProducts(allProducts);
     }
   }
 
@@ -213,13 +206,14 @@ const ProductList = () => {
       <ProductsToolbar
         handleOpen={handleAddModal}
         handleSearch={handleSearch}
+        length={data.products.length}
       />
       <div className={classes.content}>
         <Grid
           container
           spacing={3}
         >
-          {products.map(product => (
+          {data.products.map(product => (
             <Grid
               item
               key={product._id}

@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles';//
 import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';//
 import MenuIcon from '@material-ui/icons/Menu';//
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';//
-import InputIcon from '@material-ui/icons/Input';//
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,12 +16,15 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   signOutButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
+  },
+  link: {
+    color: 'red'
   }
 }));
 
 const Topbar = props => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, onSidebarOpen, handleSignout, ...rest } = props;
 
   const classes = useStyles();
 
@@ -54,7 +57,9 @@ const Topbar = props => {
             className={classes.signOutButton}
             color="inherit"
           >
-            <InputIcon />
+            <LogoutIcon
+              onClick={handleSignout}
+            />
           </IconButton>
         </Hidden>
         <Hidden lgUp>
@@ -66,7 +71,7 @@ const Topbar = props => {
           </IconButton>
         </Hidden>
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 };
 

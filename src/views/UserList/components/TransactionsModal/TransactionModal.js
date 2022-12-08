@@ -40,29 +40,31 @@ const TransactionsModal = (props) => {
                 <Typography id="modal-modal-title" variant="h5" component="h2">
                     Customer Transactions ({transactions.length});
                 </Typography>
-                <Typography>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Buyer Name</TableCell>
-                                <TableCell>Phone #</TableCell>
-                                <TableCell>Date</TableCell>
-                                <TableCell>Status</TableCell>
-                            </TableRow>
-                            {transactions.map((transaction) => {
-                                return (
-                                    <TableRow>
-                                        <TableCell>{transaction.buyerName}</TableCell>
-                                        <TableCell>{transaction.buyerPhoneNumber}</TableCell>
-                                        <TableCell>{transaction.transactionDate}</TableCell>
-                                        <TableCell>{transaction.status}</TableCell>
-                                    </TableRow>
-                                )
-                            })}
-                        </TableHead>
-                    </Table>
-                </Typography>
-
+                {transactions.length ?
+                    <Typography>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Buyer Name</TableCell>
+                                    <TableCell>Phone #</TableCell>
+                                    <TableCell>Date</TableCell>
+                                    <TableCell>Status</TableCell>
+                                </TableRow>
+                                {transactions.map((transaction) => {
+                                    return (
+                                        <TableRow>
+                                            <TableCell>{transaction.buyerName}</TableCell>
+                                            <TableCell>{transaction.buyerPhoneNumber}</TableCell>
+                                            <TableCell>{transaction.transactionDate}</TableCell>
+                                            <TableCell>{transaction.status}</TableCell>
+                                        </TableRow>
+                                    )
+                                })}
+                            </TableHead>
+                        </Table>
+                    </Typography>
+                    :
+                    <Typography align='center' mt='4%'>No Transactions For This Customer</Typography>}
             </Box>
         </Modal>
     )
