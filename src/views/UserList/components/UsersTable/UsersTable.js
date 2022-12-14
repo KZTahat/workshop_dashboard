@@ -64,6 +64,9 @@ const UsersTable = (props) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [startRow, setStartRow] = useState(0);
+
+
 
   const handleSelectAll = event => {
     let selectedUsers;
@@ -97,12 +100,16 @@ const UsersTable = (props) => {
     setSelectedUsers(newSelectedUsers);
   };
 
-  const handlePageChange = (event, page) => {
-    setPage(page);
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+    if(newPage > page) setStartRow(startRow + rowsPerPage);
+    if(newPage < page) setStartRow(startRow - rowsPerPage);
   };
 
   const handleRowsPerPageChange = event => {
     setRowsPerPage(event.target.value);
+    setStartRow(0);
+    setPage(0);
   };
 
 
@@ -137,7 +144,7 @@ const UsersTable = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.slice(0, rowsPerPage).map(user => (
+                {users.slice(startRow, startRow + rowsPerPage).map(user => (
                   <TableRow
                     className={classes.tableRow}
                     hover

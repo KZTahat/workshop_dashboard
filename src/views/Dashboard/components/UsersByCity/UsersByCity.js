@@ -1,8 +1,8 @@
-import React from 'react';//
-// import { Doughnut } from 'react-chartjs-2';//
-import clsx from 'clsx';//
-import PropTypes from 'prop-types';//
-import { makeStyles, useTheme } from '@material-ui/styles';//
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { makeStyles, useTheme } from '@material-ui/styles';
 import {
   Card,
   CardHeader,
@@ -10,11 +10,8 @@ import {
   IconButton,
   Divider,
   Typography
-} from '@material-ui/core';//
-import LaptopMacIcon from '@material-ui/icons/LaptopMac';//
-import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';//
-import RefreshIcon from '@material-ui/icons/Refresh';//
-import TabletMacIcon from '@material-ui/icons/TabletMac';//
+} from '@material-ui/core';
+import { useData } from "../../../../dataContext";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,27 +35,57 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UsersByDevice = props => {
-  const { className, ...rest } = props;
+const cities = ['Amman', 'Irbid', 'Jarash', 'AL-Zarqa', 'Madaba', 'Aqapa', 'Al-Salt', 'Al-karak', 'Al-Tafilah', 'Ajloun', 'Al-Ramtha', 'Al-balqa']
 
+const UsersByCity = props => {
+  const { className, ...rest } = props;
+  const apiData = useData();  
   const classes = useStyles();
   const theme = useTheme();
+
+  let citiesCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  apiData.users.forEach((user) => {
+    for (let index = 0; index < cities.length; index++) {
+      if (user.city == cities[index]) citiesCount[index] += 1;
+    }
+  })
+
+  const citiesTitles = [
+    {
+      title: 'Amman',
+      value: Math.floor((citiesCount[0]/apiData.users.length)*100),
+      color: 'red'
+    },
+    {
+      title: 'Irbid',
+      value: Math.floor((citiesCount[1]/apiData.users.length)*100),
+      color: 'yellow'
+    },
+    {
+      title: 'Jarash',
+      value: Math.floor((citiesCount[2]/apiData.users.length)*100),
+      color: 'blue'
+    },
+    {
+      title: 'Aqaba',
+      value: Math.floor((citiesCount[5]/apiData.users.length)*100),
+      color: 'black'
+    }
+  ];
 
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
+        data: citiesCount,
         backgroundColor: [
-          theme.palette.primary.main,
-          theme.palette.error.main,
-          theme.palette.warning.main
+          'red', 'yellow', 'blue', 'orange', 'purple', 'black', 'darkblue', 'rebeccapurple', 'gold', 'darkmagenta', 'brown', 'hotpink'
         ],
         borderWidth: 8,
         borderColor: theme.palette.white,
         hoverBorderColor: theme.palette.white
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['Amman', 'Irbid', 'Jarash', 'AL-Zarqa', 'Madaba', 'Aqapa', 'Al-Salt', 'Al-karak', 'Al-Tafilah', 'Ajloun', 'Al-Ramtha', 'Al-balqa']
   };
 
   const options = {
@@ -83,50 +110,24 @@ const UsersByDevice = props => {
     }
   };
 
-  const devices = [
-    {
-      title: 'Desktop',
-      value: '63',
-      icon: <LaptopMacIcon />,
-      color: theme.palette.primary.main
-    },
-    {
-      title: 'Tablet',
-      value: '15',
-      icon: <TabletMacIcon />,
-      color: theme.palette.error.main
-    },
-    {
-      title: 'Mobile',
-      value: '23',
-      icon: <PhoneIphoneIcon />,
-      color: theme.palette.warning.main
-    }
-  ];
-
   return (
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        action={
-          <IconButton size="small">
-            <RefreshIcon />
-          </IconButton>
-        }
-        title="Users By Device"
+        title="Users By City"
       />
       <Divider />
       <CardContent>
         <div className={classes.chartContainer}>
-          {/* <Doughnut
+          <Doughnut
             data={data}
             options={options}
-          /> */}
+          />
         </div>
         <div className={classes.stats}>
-          {devices.map(device => (
+          {citiesTitles.map(device => (
             <div
               className={classes.device}
               key={device.title}
@@ -147,8 +148,8 @@ const UsersByDevice = props => {
   );
 };
 
-UsersByDevice.propTypes = {
+UsersByCity.propTypes = {
   className: PropTypes.string
 };
 
-export default UsersByDevice;
+export default UsersByCity;

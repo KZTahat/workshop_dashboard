@@ -5,6 +5,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import FlakyIcon from '@mui/icons-material/Flaky';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {
   Card,
   CardActions,
@@ -21,20 +22,24 @@ import {
 
 import { TablePagination } from '@material-ui/core';
 import { getInitials } from '../../../../helpers';
+import { StatusBullet } from '../../../../components';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: '2%'
+    marginTop: '2%',
   },
   content: {
     padding: 0,
   },
   inner: {
-    minWidth: 1050
+    minWidth: 1050,
   },
   nameContainer: {
     display: 'flex',
     alignItems: 'center'
+  },
+  status: {
+    marginRight: theme.spacing(1)
   },
   avatar: {
     marginRight: theme.spacing(2)
@@ -43,18 +48,31 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'flex-end'
   },
   FlakyIcon: {
-    marginLeft: '12%',
+    marginRight: '12%',
     cursor: 'pointer',
   }
 }));
 
+const statusColors = {
+  delivered: 'success',
+  pending: 'info',
+  canceled: 'danger',
+};
+
 const TransactionsTable = (props) => {
-  const { className, transactions, updateStatus, ...rest } = props;
+  const {
+    className,
+    transactions,
+    updateStatus,
+    handleShowModal,
+    cancelTransaction,
+    ...rest } = props;
   const classes = useStyles();
 
   const [selectedTrans, setSelectedTrans] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [startRow, setStartRow] = useState(0);
 
   const handleSelectAll = event => {
     let selectedTrans;
@@ -88,12 +106,16 @@ const TransactionsTable = (props) => {
     setSelectedTrans(newSelectedTrans);
   };
 
-  const handlePageChange = (event, page) => {
-    setPage(page);
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+    if (newPage > page) setStartRow(startRow + rowsPerPage);
+    if (newPage < page) setStartRow(startRow - rowsPerPage);
   };
 
   const handleRowsPerPageChange = event => {
     setRowsPerPage(event.target.value);
+    setStartRow(0);
+    setPage(0);
   };
 
 
@@ -102,7 +124,9 @@ const TransactionsTable = (props) => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      <CardContent className={classes.content}>
+      <CardContent className={classes.content}
+        style={{ minHeight: `${(rowsPerPage + 2) * 65}px` }}
+      >
         <PerfectScrollbar>
           <div className={classes.inner}>
             <Table>
@@ -123,12 +147,13 @@ const TransactionsTable = (props) => {
                   <TableCell>Trans. ID</TableCell>
                   <TableCell>Phone</TableCell>
                   <TableCell>Trans. date</TableCell>
+                  <TableCell>Amount</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {transactions.slice(0, rowsPerPage).map(transaction => (
+                {transactions.slice(startRow, startRow + rowsPerPage).map(transaction => (
                   <TableRow
                     className={classes.tableRow}
                     hover
@@ -143,7 +168,10 @@ const TransactionsTable = (props) => {
                         value="true"
                       />
                     </TableCell>
-                    <TableCell>
+                    <TableCell
+                      onClick={() => handleShowModal(transaction)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className={classes.nameContainer}>
                         <Avatar
                           className={classes.avatar}
@@ -157,17 +185,30 @@ const TransactionsTable = (props) => {
                     <TableCell>{transaction._id}</TableCell>
                     <TableCell>{transaction.buyerPhoneNumber}</TableCell>
                     <TableCell>
-                      {moment(transaction.transactionDate).format('DD/MM/YYYY')}
+                      {transaction.transactionDate.split('T')[0]}
                     </TableCell>
+                    <TableCell>{transaction.amount} JD</TableCell>
                     <TableCell
-                      style={{ color: transaction.status == 'delivered' ? 'green' : 'red' }}
+                      style={{
+                        color: transaction.status == 'delivered' ? 'green'
+                          : transaction.status == 'pending' ? 'blue' : 'red'
+                      }}
                     >
+                      <StatusBullet
+                        className={classes.status}
+                        color={statusColors[transaction.status]}
+                        size="sm"
+                      />
                       {transaction.status}
                     </TableCell>
                     <TableCell>
                       <FlakyIcon
                         className={classes.FlakyIcon}
                         onClick={() => updateStatus(transaction._id, transaction.status)}
+                      />
+                      <HighlightOffIcon
+                        className={classes.FlakyIcon}
+                        onClick={() => cancelTransaction(transaction._id, transaction.status)}
                       />
                     </TableCell>
                   </TableRow>
@@ -182,7 +223,7 @@ const TransactionsTable = (props) => {
           component="div"
           count={transactions.length}
           onPageChange={handlePageChange}
-          onChangeRowsPerPage={handleRowsPerPageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
           page={page}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}

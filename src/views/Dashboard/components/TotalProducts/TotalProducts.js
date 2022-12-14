@@ -1,7 +1,7 @@
-import React from 'react';//
-import clsx from 'clsx';//
-import PropTypes from 'prop-types';//
-import { makeStyles } from '@material-ui/styles';//
+import React from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import {
   Card,
   CardContent,
@@ -9,8 +9,9 @@ import {
   Typography,
   Avatar,
   LinearProgress
-} from '@material-ui/core';//
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';//
+} from '@material-ui/core';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import { useData } from '../../../../dataContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 
 const TasksProgress = props => {
   const { className, ...rest } = props;
+  const data = useData();
 
   const classes = useStyles();
 
@@ -51,7 +53,7 @@ const TasksProgress = props => {
       <CardContent>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
         >
           <Grid item>
             <Typography
@@ -60,19 +62,19 @@ const TasksProgress = props => {
               gutterBottom
               variant="body2"
             >
-              TASKS PROGRESS
+              TOTAL PRODUCTS
             </Typography>
-            <Typography variant="h3">75.5%</Typography>
+            <Typography variant="h3">{data.products.length}</Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
-              <InsertChartIcon className={classes.icon} />
+              <ProductionQuantityLimitsIcon className={classes.icon} />
             </Avatar>
           </Grid>
         </Grid>
         <LinearProgress
           className={classes.progress}
-          value={75.5}
+          value={data.products.length}
           variant="determinate"
         />
       </CardContent>

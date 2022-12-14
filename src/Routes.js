@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 
-import { RouteWithLayout } from './components';
+import { RouteWithLayout, ProtectedRoute } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
@@ -26,36 +26,42 @@ const Routes = () => {
       />
       <RouteWithLayout
         component={DashboardView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/dashboard"
       />
       <RouteWithLayout
         component={UserListView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/users"
       />
       <RouteWithLayout
         component={ProductListView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/products"
       />
       <RouteWithLayout
         component={TransactionView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/transactions"
       />
       <RouteWithLayout
         component={AccountView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/account"
       />
       <RouteWithLayout
         component={SettingsView}
+        protected={ProtectedRoute}
         exact
         layout={MainLayout}
         path="/settings"

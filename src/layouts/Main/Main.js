@@ -6,6 +6,7 @@ import { useMediaQuery } from '@material-ui/core';
 import Swal from 'sweetalert2';
 import { Sidebar, Topbar, Footer } from './components';
 import { useHistory } from "react-router-dom";
+import cookie from 'react-cookies';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,8 +57,8 @@ const Main = props => {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          // here goes the sign out implementation
-          history.push('/sign-in')
+          cookie.remove('token');
+          history.push('/sign-in');
         }
       })
       .catch((err) => {

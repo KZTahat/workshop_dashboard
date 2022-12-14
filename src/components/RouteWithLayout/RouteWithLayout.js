@@ -1,17 +1,28 @@
-import React from 'react';//
-import { Route } from 'react-router-dom';//
-import PropTypes from 'prop-types';//
+import React from 'react';
+import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import ProtectedRoute from '../ProtectedRoute';
 
 const RouteWithLayout = props => {
-  const { layout: Layout, component: Component, ...rest } = props;
+  const { layout: Layout, component: Component, protected: ProtectedRoute, ...rest } = props;
 
   return (
     <Route
       {...rest}
       render={matchProps => (
-        <Layout>
-          <Component {...matchProps} />
-        </Layout>
+        ProtectedRoute
+          ?
+          <ProtectedRoute>
+            <Layout>
+              <Component {...matchProps} />
+            </Layout>
+          </ProtectedRoute>
+
+          :
+          <Layout>
+            <Component {...matchProps} />
+          </Layout>
+
       )}
     />
   );

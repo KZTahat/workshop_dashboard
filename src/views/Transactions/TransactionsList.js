@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';//
-import { makeStyles } from '@material-ui/styles';//
+import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/styles';
 import axios from 'axios';
-import { TransactionsTable, TransToolbar } from './components';//
+import { TransactionsTable, TransToolbar } from './components';
 import Swal from 'sweetalert2';
-import { socket } from '../../App'
 import { useData } from '../../dataContext';
+import { TransDetailsModal } from '../../components';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,54 +18,71 @@ const useStyles = makeStyles(theme => ({
 
 let allTransactions;
 const TransactionsList = () => {
+  const [showModal, setShowModal] = useState(false);
   const classes = useStyles();
   const data = useData();
-  
+
   useEffect(() => {
     allTransactions = data.transactions;
   }, [])
 
-  socket.on('new_transaction', (message) => {
-    console.log(message);
-  })
+  const handleShowModal = (transaction) => {
+    let foundPurchases = [];
+    transaction.Purchases.forEach((id) => {
+      axios.get(`${process.env.REACT_APP_PRODUCTS}/getproductbyid/${id}`)
+        .then((response) => {
+          foundPurchases.push(response.data.product);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    setShowModal(true);
+  };
+  const handleCloseModal = () => setShowModal(false);
 
+  const cancelTransaction = (transactionId, status) => {
+    if (status == 'canceled') {
+      Swal.fire({text: 'transaction already canceled', icon: 'warning',});
+    }
+    else {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, cancel it!'
+      })
+        .then((result) => {
+          if (result.isConfirmed && (status != 'pending' || status != 'delivered')) {
+            axios.patch(`${process.env.REACT_APP_TRANSACTIONS}/canceltransaction/${transactionId}`)
+              .then((response) => {
+                let newTransList = [];
+                data.transactions.forEach((transaction) => {
+                  if (transaction._id == transactionId) transaction.status = 'canceled'
+                  newTransList.push(transaction);
+                })
+                data.setTransactions(newTransList);
+                allTransactions = newTransList;
+                Swal.fire(
+                  'Canceled!',
+                  'Transaction has been canceled.',
+                  'success'
+                )
+              })
+              .catch((err) => {
+                console.log(err);
+              })
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
 
-  // const handleDelete = (userId) => {
-  //   Swal.fire({
-  //     title: 'Are you sure?',
-  //     text: "You won't be able to revert this!",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#3085d6',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, delete it!'
-  //   })
-  //     .then((result) => {
-  //       if (result.isConfirmed) {
-  //         axios.delete(`${process.env.REACT_APP_USERS}/deleteuser/${userId}`)
-  //           .then((response) => {
-  //             console.log(response);
-  //             let newUsersList = [];
-  //             users.forEach((user) => {
-  //               if (user._id !== userId) newUsersList.push(user);
-  //             })
-  //             setUsers(newUsersList);
-  //             allTransactions = newUsersList;
-  //             Swal.fire(
-  //               'Deleted!',
-  //               'User has been deleted.',
-  //               'success'
-  //             )
-  //           })
-  //           .catch((err) => {
-  //             console.log(err);
-  //           })
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // }
+  }
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -100,51 +117,61 @@ const TransactionsList = () => {
   }
 
   const updateStatus = (transId, status) => {
-    try {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Update!'
-      })
-        .then((result) => {
-          if (result.isConfirmed) {
-            let newStatus = 'delivered';
-            if (status == 'delivered') newStatus = 'processing';
-            axios.patch(`${process.env.REACT_APP_TRANSACTIONS}/updatestatus/${transId}?status=${newStatus}`)
-              .then(() => {
-                let newTransactions = data.transactions.map((trans) => {
-                  if (trans._id == transId) {
-                    trans.status = newStatus;
-                  }
-                  return trans;
+    if (status == 'canceled') {
+      Swal.fire({text: 'Could not change status', icon: 'warning',});
+    }
+    else {
+      try {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Update!'
+        })
+          .then((result) => {
+            if (result.isConfirmed && status != 'canceled') {
+              let newStatus = 'delivered';
+              if (status == 'delivered') newStatus = 'pending';
+              axios.patch(`${process.env.REACT_APP_TRANSACTIONS}/updatestatus/${transId}?status=${newStatus}`)
+                .then(() => {
+                  let newTransactions = data.transactions.map((trans) => {
+                    if (trans._id == transId) {
+                      trans.status = newStatus;
+                    }
+                    return trans;
+                  })
+                  Swal.fire(
+                    'Updated!',
+                    'The status has been Updated.',
+                    'success'
+                  )
+                  data.setTransactions(newTransactions);
+                  allTransactions = newTransactions;
                 })
-                Swal.fire(
-                  'Updated!',
-                  'The status has been Updated.',
-                  'success'
-                )
-                data.setTransactions(newTransactions);
-                allTransactions = newTransactions;
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    } catch (error) {
-      console.log(error);
+                .catch((err) => {
+                  console.log(err);
+                })
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
   return (
     <div className={classes.root}>
+      <TransDetailsModal
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        purchases={data.purchases}
+      />
       <TransToolbar
         handleSearch={handleSearch}
         length={data.transactions.length}
@@ -153,6 +180,8 @@ const TransactionsList = () => {
         <TransactionsTable
           updateStatus={updateStatus}
           transactions={data.transactions}
+          handleShowModal={handleShowModal}
+          cancelTransaction={cancelTransaction}
         />
       </div>
     </div>

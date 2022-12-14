@@ -1,27 +1,35 @@
-import React from 'react';//
-import { makeStyles } from '@material-ui/styles';//
-import { Grid } from '@material-ui/core';//
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/styles';
+import { Grid } from '@material-ui/core';
 
 import {
   Budget,
   TotalUsers,
-  TasksProgress,
-  TotalProfit,
-  // LatestSales,
-  // UsersByDevice,
+  TotalProducts,
+  TotalSales,
+  LatestSales,
+  UsersByCity,
   LatestProducts,
   LatestOrders
-} from './components';//
+} from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(4)
+  },
+  cursorPointer: {
+    cursor: 'pointer'
   }
 }));
 
 const Dashboard = () => {
   const classes = useStyles();
+  const history = useHistory();
 
+  const handle = () => {
+    history.push('./users');
+  }
   return (
     <div className={classes.root}>
       <Grid
@@ -44,7 +52,10 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TotalUsers />
+          <TotalUsers
+            onClick={handle}
+            className={classes.cursorPointer}
+          />
         </Grid>
         <Grid
           item
@@ -53,7 +64,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TasksProgress />
+          <TotalProducts />
         </Grid>
         <Grid
           item
@@ -62,7 +73,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          <TotalProfit />
+          <TotalSales />
         </Grid>
         <Grid
           item
@@ -71,7 +82,7 @@ const Dashboard = () => {
           xl={9}
           xs={12}
         >
-          {/* <LatestSales /> */}
+          <LatestSales />
         </Grid>
         <Grid
           item
@@ -80,7 +91,7 @@ const Dashboard = () => {
           xl={3}
           xs={12}
         >
-          {/* <UsersByDevice /> */}
+          <UsersByCity />
         </Grid>
         <Grid
           item

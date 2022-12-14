@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     marginTop: theme.spacing(2)
-  }
+  },
 }));
 
 let allUsers;
@@ -78,7 +78,7 @@ const UserList = () => {
     let searchKey = event.target.searchKey.value;
     let searchBy = event.target.searchBy.value;
     if (searchKey) {
-      let customers = []
+      let customers = [];
       allUsers.forEach((user) => {
         if (user[searchBy]
           .toLowerCase()

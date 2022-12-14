@@ -3,13 +3,7 @@ import {
     Typography,
     Modal,
     Box,
-    Card,
-    CardActions,
-    CardContent,
-    Avatar,
-    Checkbox,
     Table,
-    TableBody,
     TableCell,
     TableHead,
     TableRow,
@@ -30,43 +24,43 @@ const style = {
 const TransactionsModal = (props) => {
     const { showModal, transactions, handleCloseModal } = props
     return (
-        <Modal
-            open={showModal}
-            onClose={handleCloseModal}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-        >
-            <Box sx={style}>
-                <Typography id="modal-modal-title" variant="h5" component="h2">
-                    Customer Transactions ({transactions.length});
-                </Typography>
-                {transactions.length ?
-                    <Typography>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Buyer Name</TableCell>
-                                    <TableCell>Phone #</TableCell>
-                                    <TableCell>Date</TableCell>
-                                    <TableCell>Status</TableCell>
-                                </TableRow>
-                                {transactions.map((transaction) => {
-                                    return (
-                                        <TableRow>
-                                            <TableCell>{transaction.buyerName}</TableCell>
-                                            <TableCell>{transaction.buyerPhoneNumber}</TableCell>
-                                            <TableCell>{transaction.transactionDate}</TableCell>
-                                            <TableCell>{transaction.status}</TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableHead>
-                        </Table>
+            <Modal
+                open={showModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style} style={{ maxHeight: '600px', overflow: 'scroll' }}>
+                    <Typography id="modal-modal-title" variant="h5" component="h2">
+                        Customer Transactions ({transactions.length})
                     </Typography>
-                    :
-                    <Typography align='center' mt='4%'>No Transactions For This Customer</Typography>}
-            </Box>
-        </Modal>
+                    {transactions.length ?
+                        <Typography>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Buyer Name</TableCell>
+                                        <TableCell>Phone #</TableCell>
+                                        <TableCell>Date</TableCell>
+                                        <TableCell>Status</TableCell>
+                                    </TableRow>
+                                    {transactions.map((transaction) => {
+                                        return (
+                                            <TableRow>
+                                                <TableCell>{transaction.buyerName}</TableCell>
+                                                <TableCell>{transaction.buyerPhoneNumber}</TableCell>
+                                                <TableCell>{transaction.transactionDate}</TableCell>
+                                                <TableCell>{transaction.status}</TableCell>
+                                            </TableRow>
+                                        )
+                                    })}
+                                </TableHead>
+                            </Table>
+                        </Typography>
+                        :
+                        <Typography align='center' mt='4%'>No Transactions For This Customer</Typography>}
+                </Box>
+            </Modal>
     )
 }
 

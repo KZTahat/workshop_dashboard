@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,8 +20,7 @@ import {
   TableSortLabel
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-
-import mockData from './data';
+import { useData } from '../../../../dataContext';
 import { StatusBullet } from '../../../../components';
 
 const useStyles = makeStyles(theme => ({
@@ -47,22 +46,21 @@ const useStyles = makeStyles(theme => ({
 const statusColors = {
   delivered: 'success',
   pending: 'info',
-  refunded: 'danger'
+  canceled: 'danger',
 };
 
 const LatestOrders = props => {
   const { className, ...rest } = props;
-
+  const data = useData();
   const classes = useStyles();
+  const [orders, setOrders] = useState([]);
+  const history = useHistory();
 
-  // useEffect(() => {
-  //   try {
-  //     axios.get(`${process.env.REACT_APP_TRANSACTIONS}/getalltransactions`)
-  //   } catch (error) {
-      
-  //   }
-  // }, [])
-  const [orders] = useState(mockData);
+  useEffect(() => {
+    setOrders(data.transactions.slice(0, 6))
+  }, [])
+
+  const toTransactions = () => history.push('/transactions');
 
   return (
     <Card
@@ -88,7 +86,6 @@ const LatestOrders = props => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Order Ref</TableCell>
                   <TableCell>Customer</TableCell>
                   <TableCell sortDirection="desc">
                     <Tooltip
@@ -103,32 +100,35 @@ const LatestOrders = props => {
                       </TableSortLabel>
                     </Tooltip>
                   </TableCell>
+                  <TableCell>Amount</TableCell>
                   <TableCell>Status</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {orders.map(order => (
-                  <TableRow
-                    hover
-                    key={order.id}
-                  >
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{order.customer.name}</TableCell>
-                    <TableCell>
-                      {moment(order.createdAt).format('DD/MM/YYYY')}
-                    </TableCell>
-                    <TableCell>
-                      <div className={classes.statusContainer}>
-                        {/* <StatusBullet
-                          className={classes.status}
-                          color={statusColors[order.status]}
-                          size="sm"
-                        /> */}
-                        {order.status}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+
+                    <TableRow
+                      hover
+                      key={order.id}
+                    >
+                      <TableCell>{order.buyerName}</TableCell>
+                      <TableCell>
+                        {order.transactionDate.split('T')[0]}
+                      </TableCell>
+                      <TableCell>{order.amount} JD</TableCell>
+                      <TableCell>
+                        <div className={classes.statusContainer}>
+                          <StatusBullet
+                            className={classes.status}
+                            color={statusColors[order.status]}
+                            size="sm"
+                          />
+                          {order.status}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           </div>
@@ -140,6 +140,7 @@ const LatestOrders = props => {
           color="primary"
           size="small"
           variant="text"
+          onClick={toTransactions}
         >
           View all <ArrowRightIcon />
         </Button>

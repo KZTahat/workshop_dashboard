@@ -1,7 +1,8 @@
-import React, { useState } from 'react';//
-import clsx from 'clsx';//
-import PropTypes from 'prop-types';//
-import { makeStyles } from '@material-ui/styles';//
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import {
   Card,
   CardHeader,
@@ -14,11 +15,10 @@ import {
   ListItemAvatar,
   ListItemText,
   IconButton
-} from '@material-ui/core';//
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';//
-import MoreVertIcon from '@material-ui/icons/MoreVert';//
-
-import mockData from './data';//
+} from '@material-ui/core';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useData } from '../../../../dataContext';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -38,10 +38,16 @@ const useStyles = makeStyles(() => ({
 
 const LatestProducts = props => {
   const { className, ...rest } = props;
-
+  const data = useData();
   const classes = useStyles();
+  const [products, setProducts] = useState([]);
+  const history = useHistory();
 
-  const [products] = useState(mockData);
+  useEffect(() => {
+    setProducts(data.products.slice(0, 5));
+  }, []);
+
+  const toProducts = () => history.push('/products');
 
   return (
     <Card
@@ -64,12 +70,12 @@ const LatestProducts = props => {
                 <img
                   alt="Product"
                   className={classes.image}
-                  src={product.imageUrl}
+                  src={product.image}
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={product.name}
-                secondary={`Updated ${product.updatedAt.fromNow()}`}
+                primary={product.productName}
+              // secondary={`Updated ${product.updatedAt.fromNow()}`}
               />
               <IconButton
                 edge="end"
@@ -87,6 +93,7 @@ const LatestProducts = props => {
           color="primary"
           size="small"
           variant="text"
+          onClick={toProducts}
         >
           View all <ArrowRightIcon />
         </Button>

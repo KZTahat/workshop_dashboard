@@ -1,9 +1,10 @@
-import React from 'react';//
-import clsx from 'clsx';//
-import PropTypes from 'prop-types';//
-import { makeStyles } from '@material-ui/styles';//
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';//
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';//
+import React, {useState, useEffect} from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
+import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import { useData } from '../../../../dataContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,11 +31,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TotalProfit = props => {
+const TotalSales = props => {
   const { className, ...rest } = props;
-
+  const data = useData();
   const classes = useStyles();
-
+  
   return (
     <Card
       {...rest}
@@ -43,7 +44,7 @@ const TotalProfit = props => {
       <CardContent>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
         >
           <Grid item>
             <Typography
@@ -52,13 +53,13 @@ const TotalProfit = props => {
               gutterBottom
               variant="body2"
             >
-              TOTAL PROFIT
+              TOTAL SALES
             </Typography>
             <Typography
               color="inherit"
               variant="h3"
             >
-              $23,200
+              {data.totalSales} JD
             </Typography>
           </Grid>
           <Grid item>
@@ -72,8 +73,8 @@ const TotalProfit = props => {
   );
 };
 
-TotalProfit.propTypes = {
+TotalSales.propTypes = {
   className: PropTypes.string
 };
 
-export default TotalProfit;
+export default TotalSales;

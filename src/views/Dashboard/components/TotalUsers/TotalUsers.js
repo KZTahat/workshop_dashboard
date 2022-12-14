@@ -1,10 +1,11 @@
-import React from 'react';//
-import clsx from 'clsx';//
-import PropTypes from 'prop-types';//
-import { makeStyles } from '@material-ui/styles';//
-import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';//
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';//
-import PeopleIcon from '@material-ui/icons/PeopleOutlined';//
+import React from 'react';
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
+import { Card, CardContent, Grid, Typography, Avatar } from '@material-ui/core';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import PeopleIcon from '@material-ui/icons/PeopleOutlined';
+import { useData } from '../../../../dataContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TotalUsers = props => {
+  const data = useData();
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -53,7 +55,7 @@ const TotalUsers = props => {
       <CardContent>
         <Grid
           container
-          justify="space-between"
+          justifyContent="space-between"
         >
           <Grid item>
             <Typography
@@ -64,7 +66,7 @@ const TotalUsers = props => {
             >
               TOTAL USERS
             </Typography>
-            <Typography variant="h3">1,600</Typography>
+            <Typography variant="h3">{data.users.length}</Typography>
           </Grid>
           <Grid item>
             <Avatar className={classes.avatar}>
