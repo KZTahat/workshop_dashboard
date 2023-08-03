@@ -22,11 +22,17 @@ import {
 } from '@mui/material';
 import { Howl } from 'howler';
 import bells_notification from './bells_notification.mp3';
+import new_user from './new_user.mp3'
 import { TransDetailsModal } from '../../../../components'
 
-const newSound = new Howl({
-  src: [bells_notification]
-});
+const newSound = {
+  transaction: new Howl({
+    src: [bells_notification]
+  }),
+  user: new Howl({
+    src: [new_user]
+  }),
+}
 
 const ITEM_HEIGHT = 48;
 
@@ -59,12 +65,22 @@ const Topbar = props => {
   const [showModal, setShowModal] = useState(false);
 
   socket.on('new_transaction', (newTransaction) => {
+    console.log('new transaction 1212');
     data.setTransactions([newTransaction, ...data.transactions]);
     newTransaction.seen = false;
     setNotification([newTransaction, ...notifications]);
     localStorage.setItem('notification', JSON.stringify([newTransaction, ...notifications]));
-    newSound.play();
+    newSound.transaction.play();
   })
+
+  // socket.on('new_user', (newUser) => {
+  //   console.log('new user 1212');
+  //   newSound.user.play();
+  //   data.setUsers([newUser, ...data.users]);
+    // payload.seen = false;
+    // localStorage.setItem('notification', JSON.stringify([payload, ...notifications]));
+    // newSound.play();
+  // })
 
   useEffect(() => {
     const localStorageNotifications = JSON.parse(localStorage.getItem('notification'));
@@ -77,7 +93,7 @@ const Topbar = props => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleShowModal = (transaction, id) => {
     localStorage.removeItem('notification');
     let newNotifications = [];
@@ -148,8 +164,8 @@ const Topbar = props => {
               },
             }}
           >
-            {notifications.length ? notifications.map((transaction) => (
-              <Table>
+            {notifications.length ? notifications.map((transaction, index) => (
+              <Table key={index}>
                 <MenuItem key={transaction} selected={transaction === 'Pyxis'} >
                   <TableRow
                     style={{ backgroundColor: transaction.seen ? '' : 'rgb(164, 179, 241)', borderRadius: '5%' }}
