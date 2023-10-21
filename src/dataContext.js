@@ -25,7 +25,7 @@ export function DataProvider({ children }) {
         setPurchases,
         totalSales,
     };
-
+ 
     useEffect(() => {
         try {
             axios.get(`${process.env.REACT_APP_TRANSACTIONS}/getalltransactions`)

@@ -65,7 +65,6 @@ const Topbar = props => {
   const [showModal, setShowModal] = useState(false);
 
   socket.on('new_transaction', (newTransaction) => {
-    console.log('new transaction 1212');
     data.setTransactions([newTransaction, ...data.transactions]);
     newTransaction.seen = false;
     setNotification([newTransaction, ...notifications]);
@@ -73,11 +72,13 @@ const Topbar = props => {
     newSound.transaction.play();
   })
 
-  // socket.on('new_user', (newUser) => {
-  //   console.log('new user 1212');
-  //   newSound.user.play();
-  //   data.setUsers([newUser, ...data.users]);
+  // socket.on('new_user', (payload) => {
+  //   console.log(payload);
+  //   newSound.new_user.play();
+    // data.setUsers([payload, ...data.transactions]);
+    // newTransaction.seen = false;
     // payload.seen = false;
+    // setNotification([newTransaction, ...notifications]);
     // localStorage.setItem('notification', JSON.stringify([payload, ...notifications]));
     // newSound.play();
   // })
