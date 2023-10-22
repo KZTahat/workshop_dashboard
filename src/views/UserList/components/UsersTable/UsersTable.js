@@ -140,7 +140,7 @@ const UsersTable = (props) => {
                   <TableCell>City</TableCell>
                   <TableCell>Phone</TableCell>
                   <TableCell>Signup date</TableCell>
-                  <TableCell>Actions</TableCell>
+                  {/* <TableCell>Actions</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -181,10 +181,10 @@ const UsersTable = (props) => {
                     <TableCell>
                       {moment(user.createdAt).format('DD/MM/YYYY')}
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <DeleteIcon className={classes.deleteIcons} onClick={() => handleDelete(user._id)} />
                       <BlockIcon className={classes.blockIcons} />
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

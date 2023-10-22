@@ -24,6 +24,7 @@ import { Howl } from 'howler';
 import bells_notification from './bells_notification.mp3';
 import new_user from './new_user.mp3'
 import { TransDetailsModal } from '../../../../components'
+import workshop_logo from './workshop_logo.jpg'
 
 const newSound = {
   transaction: new Howl({
@@ -75,12 +76,12 @@ const Topbar = props => {
   // socket.on('new_user', (payload) => {
   //   console.log(payload);
   //   newSound.new_user.play();
-    // data.setUsers([payload, ...data.transactions]);
-    // newTransaction.seen = false;
-    // payload.seen = false;
-    // setNotification([newTransaction, ...notifications]);
-    // localStorage.setItem('notification', JSON.stringify([payload, ...notifications]));
-    // newSound.play();
+  // data.setUsers([payload, ...data.transactions]);
+  // newTransaction.seen = false;
+  // payload.seen = false;
+  // setNotification([newTransaction, ...notifications]);
+  // localStorage.setItem('notification', JSON.stringify([payload, ...notifications]));
+  // newSound.play();
   // })
 
   useEffect(() => {
@@ -130,11 +131,13 @@ const Topbar = props => {
         purchases={data.purchases}
       />
       <Toolbar>
-        <RouterLink to="/">
+        <RouterLink to="/" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <img
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            src={workshop_logo}
+            style={{ width: '40px', height: '40px' }}
           />
+          <span style={{ color: "white", marginLeft: '1em' }}>My_Workshop</span>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

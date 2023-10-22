@@ -34,7 +34,7 @@ const Footer = props => {
       <Typography variant="caption">
         Your imagination have no limits, Be creative.
         No rules will restrict your idea, shape it up.
-        away from perfection and Ideality, Professionalism in making art.
+        Professionalism in making art.
         practicing makes experience  NOT theoretical study.
         work, learn from your mistakes THEN create 😊
       </Typography>

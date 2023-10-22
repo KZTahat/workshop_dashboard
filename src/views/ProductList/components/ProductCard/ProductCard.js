@@ -116,13 +116,13 @@ const ProductCard = props => {
           >
             Update
           </Button>
-          <Button
+          {/* <Button
             color="warning"
             variant="outlined"
             onClick={() => { props.handleDeletion(product._id) }}
           >
             delete
-          </Button>
+          </Button> */}
         </Grid>
       </CardActions>
     </Card>
