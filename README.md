@@ -1,4 +1,4 @@
-# Workshop Dashboard 💨
+# Workshop Dashboard 🛹
 
 The Workshop Dashboard is a web application designed to provide an intuitive interface for managing user data, products, and transactions in a workshop environment. It serves as a centralized platform for administrators to perform CRUD operations seamlessly.
 
