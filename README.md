@@ -87,7 +87,7 @@ The Workshop Dashboard is a web application designed to provide an intuitive int
 
         npm install
 
-4.  Run the application:
+5.  Run the application:
 
         npm start
 
