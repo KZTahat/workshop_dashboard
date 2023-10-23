@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+# Workshop Dashboard 💨
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The Workshop Dashboard is a web application designed to provide an intuitive interface for managing user data, products, and transactions in a workshop environment. It serves as a centralized platform for administrators to perform CRUD operations seamlessly.
 
-## Available Scripts
+## Features 🪶
 
-In the project directory, you can run:
+- **Authentication:** The dashboard features a secure authentication system that allows only authorized administrators to log in.
 
-### `npm start`
+  ![Sign up form](./src/assets/dashboard_project/dashboard_signIn.png);
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Dashboard Section:** Provides an insightful overview of users, products, and transactions through data analytics and visualizations.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  ![Sign up form](./src/assets/dashboard_project/dashboard_dashboard.png);
 
-### `npm test`
+- **User Management:**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - View a list of all users.
+  - Add new users.
+  - Delete or block existing users.
 
-### `npm run build`
+  ![Sign up form](./src/assets/dashboard_project/dasboard_users.png);
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Transaction Management:**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  - View a list of all transactions.
+  - Update the state of a transaction to pending, delivered, or canceled.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  ![Sign up form](./src/assets/dashboard_project/dashboard_transactions.png);
 
-### `npm run eject`
+- **Product Management:**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  - View a list of all products.
+  - Add new products.
+  - Delete or update existing products.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  ![Sign up form](./src/assets/dashboard_project/dashboard_products.png);
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  ![Sign up form](./src/assets/dashboard_project/dashboard_addProduct.png);
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Notification System:**
 
-## Learn More
+  - Get real-time notifications when a new transaction occurs.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  ![Sign up form](./src/assets/dashboard_project/dashboard_notifications.png);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Confirmation Alerts:**
 
-### Code Splitting
+  - Receive confirmation alerts for every possible process the admin can perform.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+  ![Sign up form](./src/assets/dashboard_project/dashboard_alert.png);
 
-### Analyzing the Bundle Size
+- **Settings Feature:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  - Manage notifications and messages.
+  - Update your password.
 
-### Making a Progressive Web App
+  ![Sign up form](./src/assets/dashboard_project/dashoboard_settings.png);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Getting Started ⭐
 
-### Advanced Configuration
+### Prerequisites
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Node.js installed
+- MongoDB installed and running
 
-### Deployment
+### Installation 🎺
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1.  Clone the repository:
 
-### `npm run build` fails to minify
+    ```bash
+    git clone git@github.com:KZTahat/workshop_dashboard.git
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+2.  Set up environment variables:
+
+    Create a .env file in the root directory with the next variables inside.
+
+        REACT_APP_PRODUCTS=<Server>/api/v1/products
+        REACT_APP_USERS=<Server>/api/v1/users
+        REACT_APP_TRANSACTIONS=<Server>/api/v1/transactions
+
+3.  Replace the "server" with the actual running server
+
+        https://my-workshop.onrender.com
+
+4.  Install dependencies:
+
+        npm start
+
+## Enjoy 🤝
+
+I'm giving you the experience to interact with a real dashboard with actual data stored in the database, feel free to add, update and delete any record any, The dashboard is real
