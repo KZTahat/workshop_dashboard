@@ -10,7 +10,7 @@ The Workshop Dashboard is a web application designed to provide an intuitive int
 
 - **Dashboard Section:** Provides an insightful overview of users, products, and transactions through data analytics and visualizations.
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_dashboard.png);
+  ![Dashboard](./src/assets/dashboard_project/dashboard_dashboard.png);
 
 - **User Management:**
 
@@ -18,14 +18,14 @@ The Workshop Dashboard is a web application designed to provide an intuitive int
   - Add new users.
   - Delete or block existing users.
 
-  ![Sign up form](./src/assets/dashboard_project/dasboard_users.png);
+  ![Users](./src/assets/dashboard_project/dasboard_users.png);
 
 - **Transaction Management:**
 
   - View a list of all transactions.
   - Update the state of a transaction to pending, delivered, or canceled.
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_transactions.png);
+  ![Transactions](./src/assets/dashboard_project/dashboard_transactions.png);
 
 - **Product Management:**
 
@@ -33,28 +33,28 @@ The Workshop Dashboard is a web application designed to provide an intuitive int
   - Add new products.
   - Delete or update existing products.
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_products.png);
+  ![Products](./src/assets/dashboard_project/dashboard_products.png);
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_addProduct.png);
+  ![Add product](./src/assets/dashboard_project/dashboard_addProduct.png);
 
 - **Notification System:**
 
   - Get real-time notifications when a new transaction occurs.
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_notifications.png);
+  ![Notifications](./src/assets/dashboard_project/dashboard_notifications.png);
 
 - **Confirmation Alerts:**
 
   - Receive confirmation alerts for every possible process the admin can perform.
 
-  ![Sign up form](./src/assets/dashboard_project/dashboard_alert.png);
+  ![Confirmation Alerts](./src/assets/dashboard_project/dashboard_alert.png);
 
 - **Settings Feature:**
 
   - Manage notifications and messages.
   - Update your password.
 
-  ![Sign up form](./src/assets/dashboard_project/dashoboard_settings.png);
+  ![Settings](./src/assets/dashboard_project/dashoboard_settings.png);
 
 ## Getting Started ⭐
 
